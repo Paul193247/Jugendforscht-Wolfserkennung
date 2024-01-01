@@ -61,7 +61,7 @@ def plot_accuracy_vs_training_data(history):
     # Compute the number of training examples used at each epoch
     num_training_samples = []
     for i in range(len(acc)):
-        num_training_samples.append(i * train_datagen.batch_size)
+        num_training_samples.append(i * 32)
 
     # Create a plot
     plt.figure(figsize=(12, 6))
