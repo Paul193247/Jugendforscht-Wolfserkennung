@@ -2,9 +2,13 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.applications import VGG16
-from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import SparseCategoricalCrossentropy
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
+from tensorflow.keras.models import Model
+import matplotlib.pyplot as plt
 
 # Bildverarbeitungs-Generators
 train_datagen = ImageDataGenerator(
@@ -16,16 +20,21 @@ train_datagen = ImageDataGenerator(
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-# Erstellen Sie das Sequential-Modell
-model = Sequential()
-model.add(VGG16(weights='imagenet', include_top=False, input_shape=(200, 200, 3)))
-model.add(Flatten())
-model.add(Dense(1024, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(2, activation='softmax'))
+base_model = MobileNetV2(weights='imagenet', include_top=False)
 
-# Kompilieren Sie das Modell
-model.compile(optimizer=Adam(), loss=SparseCategoricalCrossentropy(), metrics=['accuracy'])
+# Füge die erforderlichen Layer hinzu, um die Anzahl der Klassen anzupassen
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dense(1024, activation='relu')(x)
+predictions = Dense(1, activation='sigmoid')(x)
+
+# Erstelle das finale Modell
+model = Model(inputs=base_model.input, outputs=predictions)
+
+# Kompiliere das Modell
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+print(model.summary())
 
 # Generieren und laden Sie das Training-Dataset
 train_generator = train_datagen.flow_from_directory(
@@ -42,12 +51,7 @@ test_generator = test_datagen.flow_from_directory(
     class_mode='binary')
 
 # Trainieren Sie das Modell
-history = model.fit(
-    train_generator,
-    steps_per_epoch=np.ceil(1000/32),
-    epochs=20,
-    validation_data=test_generator,
-    validation_steps=np.ceil(800/32))
+history = model.fit(train_generator, epochs=20, validation_data=test_generator)
 
 def plot_accuracy_vs_training_data(history):
     # Extract the accuracy values from the history
@@ -57,7 +61,7 @@ def plot_accuracy_vs_training_data(history):
     # Compute the number of training examples used at each epoch
     num_training_samples = []
     for i in range(len(acc)):
-        num_training_samples.append(i * train_data.batch_size)
+        num_training_samples.append(i * train_datagen.batch_size)
 
     # Create a plot
     plt.figure(figsize=(12, 6))
