@@ -19,5 +19,7 @@ def remove_backgrounds(input_folder, output_folder):
             with open(output_path, 'wb') as output_image:
                 output_image.write(bg_removed_image)
 
-remove_backgrounds("images/dogs_withBackground", "images/dogs")
-remove_backgrounds("images/wolves_withBackground", "images/wolves")
+remove_backgrounds("images/with_background/train/dogs", "images/removed_background/train/dogs")
+remove_backgrounds("images/with_background/train/wolves", "images/removed_background/train/wolves")
+remove_backgrounds("images/with_background/test/dogs", "images/removed_background/test/dogs")
+remove_backgrounds("images/with_background/test/wolves", "images/removed_background/test/wolves")
