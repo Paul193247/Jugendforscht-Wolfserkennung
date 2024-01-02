@@ -38,14 +38,14 @@ print(model.summary())
 
 # Generieren und laden Sie das Training-Dataset
 train_generator = train_datagen.flow_from_directory(
-    'images/train',
+    'images/edges/train',
     target_size=(128, 128),
     batch_size=32,
     class_mode='binary')
 
 # Generieren und laden Sie das Test-Dataset
 test_generator = test_datagen.flow_from_directory(
-    'images/test',
+    'images/edges/test',
     target_size=(128, 128),
     batch_size=32,
     class_mode='binary')
