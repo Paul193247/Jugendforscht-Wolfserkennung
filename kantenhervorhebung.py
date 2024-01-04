@@ -3,6 +3,8 @@ from PIL import Image, ImageFilter
 import os
 
 def process_image(file_path, output_folder):
+    if os.path.exists(os.path.join(output_folder, file_name)):
+        return
     image = Image.open(file_path)
 
     # Konvertieren Sie das Bild in Graustufen

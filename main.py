@@ -1,38 +1,38 @@
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.applications import VGG16
 from tensorflow.keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.losses import SparseCategoricalCrossentropy
-from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
-from tensorflow.keras.models import Model
 import matplotlib.pyplot as plt
 
 # Bildverarbeitungs-Generators
 train_datagen = ImageDataGenerator(
     rescale=1./255,
-    rotation_range=20,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    horizontal_flip=True)
+    rotation_range=40,
+    width_shift_range=0.3,
+    height_shift_range=0.3,
+    shear_range=0.3,
+    zoom_range=0.3,
+    horizontal_flip=True,
+    fill_mode='nearest'
+)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-base_model = MobileNetV2(weights='imagenet', include_top=False)
-
-# Füge die erforderlichen Layer hinzu, um die Anzahl der Klassen anzupassen
-x = base_model.output
-x = GlobalAveragePooling2D()(x)
-x = Dense(1024, activation='relu')(x)
-predictions = Dense(1, activation='sigmoid')(x)
-
-# Erstelle das finale Modell
-model = Model(inputs=base_model.input, outputs=predictions)
+model = Sequential()
+model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(256, 256, 3)))
+model.add(MaxPooling2D(32))
+model.add(Flatten())
+model.add(Dense(128, activation="relu"))
+model.add(Dense(512, activation="relu"))
+model.add(Dense(256, activation="relu"))
+model.add(Dense(128, activation="relu"))
+model.add(Dense(1, activation="sigmoid"))
 
 # Kompiliere das Modell
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
+
+
 
 print(model.summary())
 
@@ -51,7 +51,7 @@ test_generator = test_datagen.flow_from_directory(
     class_mode='binary')
 
 # Trainieren Sie das Modell
-history = model.fit(train_generator, epochs=20, validation_data=test_generator)
+history = model.fit(train_generator, epochs=10, validation_data=test_generator)
 
 def plot_accuracy_vs_training_data(history):
     # Extract the accuracy values from the history
