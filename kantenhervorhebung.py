@@ -11,7 +11,7 @@ def process_image(file_path, output_folder):
     gray_image = image.convert('L')
 
     # Anwenden des Kantenfilters
-    edge_image = gray_image.filter(ImageFilter.FIND_EDGES)
+    edge_image = gray_image.filter(ImageFilter.FIND_EDGES, radius=2)
 
     # Speichern Sie das bearbeitete Bild im Ausgabeverzeichnis
     file_name = os.path.basename(file_path)

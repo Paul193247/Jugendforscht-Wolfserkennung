@@ -19,18 +19,17 @@ train_datagen = ImageDataGenerator(
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-model = Sequential()
-model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(256, 256, 3)))
-model.add(MaxPooling2D(32))
-model.add(Flatten())
-model.add(Dense(128, activation="relu"))
-model.add(Dense(512, activation="relu"))
-model.add(Dense(256, activation="relu"))
-model.add(Dense(128, activation="relu"))
-model.add(Dense(1, activation="sigmoid"))
 
-# Kompiliere das Modell
-model.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
+
+model = Sequential([Conv2D(30, (3, 3), activation='relu', input_shape=(256, 256, 3)),
+                    MaxPooling2D(2, 2), 
+                    Conv2D(64, (3, 3), activation='relu'),
+                    MaxPooling2D(2, 2), 
+                    Flatten(),
+                    Dense(400, activation='relu'),
+                    Dense(2, activation='softmax')])
+
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 
 
@@ -39,19 +38,19 @@ print(model.summary())
 # Generieren und laden Sie das Training-Dataset
 train_generator = train_datagen.flow_from_directory(
     'images/edges/train',
-    target_size=(128, 128),
+    target_size=(256, 256),
     batch_size=32,
     class_mode='binary')
 
 # Generieren und laden Sie das Test-Dataset
 test_generator = test_datagen.flow_from_directory(
     'images/edges/test',
-    target_size=(128, 128),
+    target_size=(256, 256),
     batch_size=32,
     class_mode='binary')
 
 # Trainieren Sie das Modell
-history = model.fit(train_generator, epochs=10, validation_data=test_generator)
+history = model.fit(train_generator, epochs=60, validation_data=test_generator)
 
 def plot_accuracy_vs_training_data(history):
     # Extract the accuracy values from the history
