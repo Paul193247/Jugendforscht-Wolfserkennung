@@ -4,6 +4,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
 from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
+from sendmessage import sendmessage
 
 # Bildverarbeitungs-Generators
 train_datagen = ImageDataGenerator(
@@ -26,10 +27,10 @@ model = Sequential([Conv2D(30, (3, 3), activation='relu', input_shape=(256, 256,
                     Conv2D(64, (3, 3), activation='relu'),
                     MaxPooling2D(2, 2), 
                     Flatten(),
-                    Dense(400, activation='relu'),
-                    Dense(2, activation='softmax')])
+                    Dense(128, activation='relu'),
+                    Dense(1, activation='sigmoid')])
 
-model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 
 
@@ -72,4 +73,5 @@ def plot_accuracy_vs_training_data(history):
     plt.legend()
     plt.show()
 
+sendmessage("Model ist fertig trainiert")
 plot_accuracy_vs_training_data(history)
