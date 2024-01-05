@@ -1,8 +1,7 @@
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.layers import Flatten, Dense, Conv2D, MaxPooling2D
 import matplotlib.pyplot as plt
 from sendmessage import sendmessage
 
@@ -36,34 +35,31 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 
 print(model.summary())
 
-# Generieren und laden Sie das Training-Dataset
+# Generieren und laden des Training-Datasets
 train_generator = train_datagen.flow_from_directory(
     'images/edges/train',
     target_size=(256, 256),
     batch_size=32,
     class_mode='binary')
 
-# Generieren und laden Sie das Test-Dataset
+# Generieren und laden des Test-Datasets
 test_generator = test_datagen.flow_from_directory(
     'images/edges/test',
     target_size=(256, 256),
     batch_size=32,
     class_mode='binary')
 
-# Trainieren Sie das Modell
+# Trainieren des Modells
 history = model.fit(train_generator, epochs=40, validation_data=test_generator)
 
 def plot_accuracy_vs_training_data(history):
-    # Extract the accuracy values from the history
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
 
-    # Compute the number of training examples used at each epoch
     num_training_samples = []
     for i in range(len(acc)):
         num_training_samples.append(i * 32)
 
-    # Create a plot
     plt.figure(figsize=(12, 6))
     plt.plot(num_training_samples, acc, label='Training Accuracy')
     plt.plot(num_training_samples, val_acc, label='Validation Accuracy')
