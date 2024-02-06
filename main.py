@@ -26,7 +26,7 @@ model = Sequential([Conv2D(30, (3, 3), activation='relu', input_shape=(256, 256,
                     Conv2D(64, (3, 3), activation='relu'),
                     MaxPooling2D(2, 2), 
                     Flatten(),
-                    Dense(516, activation='relu'),
+                    Dense(750, activation='relu'),
                     Dense(2, activation='softmax')])
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
@@ -50,7 +50,7 @@ test_generator = test_datagen.flow_from_directory(
     class_mode='binary')
 
 # Trainieren des Modells
-history = model.fit(train_generator, epochs=60, validation_data=test_generator)
+history = model.fit(train_generator, epochs=40, validation_data=test_generator)
 
 def plot_accuracy_vs_training_data(history):
     acc = history.history['accuracy']
