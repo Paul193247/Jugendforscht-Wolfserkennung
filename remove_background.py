@@ -4,7 +4,7 @@ import os
 import shutil
 
 def remove_background(file_path, output_folder):
-    if file_path.endswith('.png') or file_path.endswith('.jpg'):
+    if file_path.endswith('.png') or file_path.endswith('.jpg') and os.path.basename(file_path) not in os.listdir(output_folder):
         output_path = os.path.join(output_folder, os.path.basename(file_path))
 
         # Entfernen des Hintergrundes des Bildes
@@ -30,4 +30,8 @@ def process_images(input_folder, output_folder):
 
 
 process_images("images/with_background/test/wolves", "images/removed_background/test/wolves")
-process_images("../../Downloads/images.cv_4e0zrqh8ggu56aji8shqnm/data/train/white_wolf", "images/removed_background/train/wolves")
+process_images("images/with_background/train/wolves", "images/removed_background/train/wolves")
+process_images("images/with_background/test/dogs", "images/removed_background/test/dogs")
+process_images("images/with_background/train/dogs", "images/removed_background/train/dogs")
+process_images("images/with_background/test/other", "images/removed_background/test/other")
+process_images("images/with_background/train/other", "images/removed_background/train/other")

@@ -10,10 +10,10 @@ from  tensorflow.keras.callbacks import ModelCheckpoint
 train_datagen = ImageDataGenerator(
     rescale=1./255,
     rotation_range=40,
-    width_shift_range=0.3,
-    height_shift_range=0.3,
-    shear_range=0.3,
-    zoom_range=0.3,
+    width_shift_range=2,
+    height_shift_range=2,
+    shear_range=2,
+    zoom_range=2,
     horizontal_flip=True,
     fill_mode='nearest'
 )
@@ -61,7 +61,8 @@ cp_callback = ModelCheckpoint(filepath=checkpoint_path,
 
 
 # Trainieren des Modells
-history = model.fit(train_generator, epochs=60, validation_data=test_generator)
+history = model.fit(train_generator, epochs=120, validation_data=test_generator)
+model.save("model.h5")
 
 def plot_accuracy_vs_training_data(history):
     acc = history.history['accuracy']
