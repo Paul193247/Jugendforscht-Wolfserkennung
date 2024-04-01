@@ -28,7 +28,7 @@ model = Sequential([Conv2D(30, (3, 3), activation='relu', input_shape=(256, 256,
                     MaxPooling2D(2, 2), 
                     Flatten(),
                     Dense(1000, activation='relu'),
-                    Dense(2, activation='softmax')])
+                    Dense(3, activation='softmax')])
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 

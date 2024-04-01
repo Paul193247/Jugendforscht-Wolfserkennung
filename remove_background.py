@@ -4,7 +4,7 @@ import os
 import shutil
 
 def remove_background(file_path, output_folder):
-    if file_path.endswith('.png') or file_path.endswith('.jpg') and os.path.basename(file_path) not in os.listdir(output_folder):
+    if file_path.endswith('.png') or file_path.endswith('.jpg') and not os.path.exists(os.path.join(output_folder, os.path.basename(file_path))):
         output_path = os.path.join(output_folder, os.path.basename(file_path))
 
         # Entfernen des Hintergrundes des Bildes
