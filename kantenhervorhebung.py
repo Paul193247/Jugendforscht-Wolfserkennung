@@ -30,7 +30,9 @@ def process_images(input_folder, output_folder):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         executor.map(lambda file_path: process_image(file_path, output_folder), file_paths)
 
-process_images("images/removed_background/train/dogs", "images/edges/train/dogs")
-process_images("images/removed_background/train/wolves", "images/edges/train/wolves")
-process_images("images/removed_background/test/dogs", "images/edges/test/dogs")
-process_images("images/removed_background/test/wolves", "images/edges/test/wolves")
+process_images("images/with_background/test/wolves", "images/removed_background/test/wolves")
+process_images("images/with_background/train/wolves", "images/removed_background/train/wolves")
+process_images("images/with_background/test/dogs", "images/removed_background/test/dogs")
+process_images("images/with_background/train/dogs", "images/removed_background/train/dogs")
+process_images("images/with_background/test/other", "images/removed_background/test/other")
+process_images("images/with_background/train/other", "images/removed_background/train/other")
