@@ -1,0 +1,12 @@
+{
+    "iou_threshold": 0.45,
+    "score_threshold": 0.5,
+    "output_activation": "none",
+    "label_offset": 1,
+    "max_boxes": 200,
+    "labels":[
+        "",
+        "Hund",
+        "Wolf"
+    ]
+}
