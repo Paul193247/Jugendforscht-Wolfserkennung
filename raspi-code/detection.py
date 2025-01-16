@@ -40,17 +40,13 @@ from gi.repository import Gst, GLib
 
 Gst.init(None)
 
-# Global flag for stopping the pipeline
 running = True
 
-# Liste zum Speichern der Frames
 frames = []
 
-# Video-Writer-Setup
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # oder 'XVID' für AVI
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 video_writer = None
 
-# Um ein Signal zu fangen, wenn ^C gedrückt wird
 def signal_handler(sig, frame):
     global running
     running = False
@@ -67,10 +63,8 @@ def draw_boxes(frame, detections):
         bbox = detection.get_bbox()
         confidence = detection.get_confidence()
 
-        # Extrahiere die Koordinaten der Bounding Box
         x1, y1, x2, y2 = bbox
-        # Zeichne die Bounding Box und den Label auf dem Bild
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)  # grüne Box
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(frame, f"{label}: {confidence:.2f}", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
     return frame
@@ -87,21 +81,16 @@ def send_message(animal):
 def app_callback(pad, info, user_data):
     global frames, video_writer, last_dog, last_wolf, last_detections
 
-    # Get the GstBuffer from the probe info
     buffer = info.get_buffer()
     if buffer is None:
         return Gst.PadProbeReturn.OK
 
-    # Get image metadata
     format, width, height = get_caps_from_pad(pad)
 
-    # Get the video frame
     frame = None
     if user_data.use_frame and format is not None and width is not None and height is not None:
-        # Get video frame
         frame = get_numpy_from_buffer(buffer, format, width, height)
 
-    # Get detections from the buffer
     roi = hailo.get_roi_from_buffer(buffer)
     detections = roi.get_objects_typed(hailo.HAILO_DETECTION)
     last_detections.append(detections)
@@ -129,7 +118,6 @@ def app_callback(pad, info, user_data):
                 last_dog = time.time()
                 send_message(label)
 
-    # Draw bounding boxes on the frame
     caps = pad.get_current_caps()
     structure = caps.get_structure(0)
     width = structure.get_int('width')[1]
@@ -140,27 +128,22 @@ def app_callback(pad, info, user_data):
         print(f"Unsupported format: {format_}")
         return Gst.PadProbeReturn.OK
 
-    # Mappe den Buffer, um Zugriff auf die Daten zu erhalten
     success, map_info = buffer.map(Gst.MapFlags.READ)
     if not success:
         return Gst.PadProbeReturn.OK
 
     try:
-        # Erstelle ein Numpy-Array aus den Rohdaten
         raw_data = np.frombuffer(map_info.data, dtype=np.uint8)
 
-        # Passe die Array-Form nur an, wenn nötig
         if format_ == 'RGB':
             image = raw_data.reshape((height, width, 3))
         elif format_ == 'GRAY8':
             image = raw_data.reshape((height, width))
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)  # In RGB umwandeln, wenn VideoWriter RGB erwartet
+            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
 
-        # Extrahiere die Erkennungen
         roi = hailo.get_roi_from_buffer(buffer)
         detections = roi.get_objects_typed(hailo.HAILO_DETECTION)
 
-        # Zeichne Bounding-Boxes und Labels nur, wenn Detections vorhanden sind
         if detections:
             for detection in detections:
                 label = detection.get_label()
@@ -173,16 +156,13 @@ def app_callback(pad, info, user_data):
                 ymin = int(bbox.ymin() * height)
                 ymax = int(bbox.ymax() * height)
                 image = image.copy()
-                # Zeichne die Bounding-Box
                 cv2.rectangle(image, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
 
-                # Zeichne das Label und die Confidence
                 cv2.putText(
                     image, f"{label}: {confidence:.2f}",
                     (xmin, ymin - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1
                 )
 
-        # Schreibe das Bild in den Video-Writer
         if video_writer is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             video_writer = cv2.VideoWriter(f'{timestamp}.mp4', fourcc, 30, (width, height))
@@ -212,7 +192,6 @@ def start():
 
 def stop_and_save_video():
     global video_writer
-    # Wenn die Pipeline gestoppt wird, speichern wir das Video
     if video_writer is not None:
         video_writer.release()
         print("Video wurde gespeichert")
@@ -225,10 +204,8 @@ try:
     while True:
         if i > 2000000:
             motion = False
-            #print(motion)
         else:
             motion = True
-        #print(motion)
         if button.is_pressed:
             i += 1
         else:
