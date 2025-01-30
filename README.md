@@ -41,8 +41,6 @@ ziemlich einzige Ausnahme war, wenn der Wolf flach auf dem Boden lag.
 Dies liegt höchstwahrscheinlich daran, dass es wenig Bilder von liegenden 
 Wölfen im meinen Trainingsbildern gab.
 
-Abb. 1
-
 3. Vorgehensweise
 3.1 Wie bin ich vorgegangen?
 •Trainingsdaten mit Roboflow vorbereitet
@@ -97,17 +95,9 @@ vermieden wird.
 
 6. Zielerreichung
 • Ich habe das neuronale Netzwerk mit YOLOv8 verbessert
-• Das neuronale Netzwerk kann nun Hunde und Wölfe erkennen, was 
-
-Abb. 2
-
-entscheidend für die Verbesserung des Wolfsmonitorings ist
-
+• Das neuronale Netzwerk kann nun Hunde und Wölfe erkennen, was entscheidend für die Verbesserung des Wolfsmonitorings ist
 • Ich habe nun eine Kamera mit Autofokus
-• Mein Raspberry Pi hat nun einen SIM-HAT und somit die Möglichkeit 
-
-SMS-Nachrichten an einen Verantwortlichen zu verschicken
-
+• Mein Raspberry Pi hat nun einen SIM-HAT und somit die Möglichkeit SMS-Nachrichten an einen Verantwortlichen zu verschicken
 • Ich habe alles in einer funktionalen Kamerabox verbunden
 
 7. Ergebnisdiskussion
