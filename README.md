@@ -46,8 +46,13 @@ Viele Funktionalitäten meines Systems wurden an meiner Katze entwickelt und get
 ### 4.2 Hund
 Da ich keinen eigenen Hund habe, testete ich die KI mit Hunden von Freunden und Bekannten – sowohl mit einem Videostream als auch mit einzelnen Bildern. Die Erkennungsrate war hoch; wenn ein Hund nicht erkannt wurde, lag es meist daran, dass er weit hinten im Bild war.
 
+![Versuch mit Hund](tests/Erster%20Versuch%20mit%20Hund/img20241124_051958_1.png)
+![Versuch mit Hund](tests/Zweiter%20Versuch%20mit%20Hund/img20241124_082834_2.png)
+
 ### 4.3 Wolf
 Um die KI an echten Wölfen zu testen, besuchte ich den Wildpark Schwarze Berge. Dort unterstützte mich die Wolfsberaterin Svenja Oßenbrügge beim Anlocken der Wölfe. Die Genauigkeit meiner KI war sehr zufriedenstellend. Eine Schwäche zeigte sich bei liegenden Wölfen, da es hiervon nur wenige Trainingsbilder gab.
+
+![Versuch mit Wolf](tests/Wildpark/20250108_183205.mp4)
 
 ## 5. Was ist neu?
 - Raspberry Pi
