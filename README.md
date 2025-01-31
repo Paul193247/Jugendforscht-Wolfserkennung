@@ -10,7 +10,7 @@ Ich war schon immer ein Tierfreund, und als ich wiederholt Artikel im *Stader Ta
 - Eine Möglichkeit einbauen, dass der Raspberry Pi unabhängig von WLAN-Netzwerken eine SMS senden kann.
 - Alles in einer funktionalen Kamerabox verbinden, die bei einer Bewegung ein Video aufnimmt, dieses klassifiziert und gegebenenfalls eine SMS-Nachricht an den Verantwortlichen sendet.
 
-![Blockschaltbild](Blockschaltbild.pdf)
+![Blockschaltbild](Blockschaltbild.png)
 
 ## 3. Vorgehensweise
 ### 3.1 Wie bin ich vorgegangen?
